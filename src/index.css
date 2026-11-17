@@ -531,3 +531,31 @@ h1.in .hw > span { transform: none; }
 .foot-ring i { position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; border-radius: 50%; background: var(--red); box-shadow: 0 0 14px var(--red); }
 .foot-core { position: absolute; inset: 40%; border-radius: 50%; background: radial-gradient(circle, #fff, #8fb4ff 70%); box-shadow: 0 0 40px rgba(143,180,255,.7); animation: vpulse 3s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .foot-ring, .foot-core { animation: none !important; } }
+
+/* ---- honeypot + toast notifications ---- */
+.hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.toasts { position: fixed; top: 92px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; width: min(410px, calc(100vw - 32px)); pointer-events: none; }
+.toast { --tc: #3bd6a0; position: relative; overflow: hidden; pointer-events: auto; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; padding: 17px 14px 19px 18px; border-radius: 20px; background: rgba(255, 255, 255, .97); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); border: 1px solid rgba(59, 95, 173, .18); box-shadow: 0 26px 56px -22px rgba(11, 26, 58, .5), 0 4px 14px rgba(11, 26, 58, .08); color: var(--ink); animation: toastIn .5s cubic-bezier(.2, .9, .2, 1) both; }
+.toast.er { --tc: #ee3159; }
+.toast.out { animation: toastOut .3s ease forwards; }
+.toast::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: linear-gradient(180deg, #3b5fad, #ee3159); }
+.toast.er::before { background: #ee3159; }
+.t-ic { width: 38px; height: 38px; margin-left: 4px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, #3b5fad, #1f5ca6); }
+.toast.ok .t-ic { background: linear-gradient(135deg, #25b583, #3bd6a0); }
+.toast.er .t-ic { background: #ee3159; }
+.t-ic svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.toast.ok .t-ic svg path { stroke-dasharray: 28; stroke-dashoffset: 28; animation: tick .5s .25s ease forwards; }
+.t-tx strong { display: block; font-size: 1rem; font-weight: 800; line-height: 1.3; letter-spacing: -.01em; }
+.t-tx p { margin-top: 4px; font-size: .9rem; line-height: 1.5; color: var(--muted); }
+.t-x { width: 30px; height: 30px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); cursor: pointer; display: grid; place-items: center; transition: background .2s, color .2s; }
+.t-x:hover { background: rgba(59, 95, 173, .1); color: var(--ink); }
+.t-x svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.t-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, #3b5fad, #ee3159); transform-origin: left; animation: toastBar 6.5s linear forwards; }
+.toast:hover .t-bar, .toast:focus-within .t-bar { animation-play-state: paused; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(40px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes toastOut { to { opacity: 0; transform: translateX(40px) scale(.97); } }
+@keyframes toastUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+@keyframes toastBar { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@keyframes tick { to { stroke-dashoffset: 0; } }
+@media (max-width: 640px) { .toasts { top: auto; bottom: 16px; right: 16px; left: 16px; width: auto; } .toast { animation-name: toastUp; } .toast.out { animation-name: toastOut; } }
+@media (prefers-reduced-motion: reduce) { .toast, .toast.out { animation-duration: .01s; } .t-bar { animation: none; } .toast.ok .t-ic svg path { animation: none; stroke-dashoffset: 0; } }

@@ -1,3 +1,4 @@
+import { sendMail } from "../lib/toast";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.webp";
@@ -33,10 +34,14 @@ export function BackToTop() {
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [s, setS] = useState("idle");
-  const sub = (e) => {
+  const [hp, setHp] = useState(""); // hidden spam-trap field
+  const sub = async (e) => {
     e.preventDefault();
+    if (s === "sending") return;
     if (!/^\S+@\S+\.\S+$/.test(email)) return setS("error");
-    setS("ok"); // TODO: connect to your newsletter service
+    setS("sending");
+    const ok = await sendMail("subscribe", { email: email.trim(), website: hp });
+    setS(ok ? "ok" : "idle");
   };
   const rows = [SERVICES.slice(0, 6), SERVICES.slice(6)]; // line 1 ends at DevOps Services
 
@@ -87,7 +92,8 @@ export default function Footer() {
                 <label htmlFor="nl" className="sr-only">Email</label>
                 <input id="nl" type="email" value={email} onChange={(e) => { setEmail(e.target.value); setS("idle"); }} placeholder="Email"
                   className="min-w-0 flex-1 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-sm text-white outline-none placeholder:text-[#7d92c4] focus:border-white/50" />
-                <button className="btn-red rounded-full px-6 py-3 text-sm font-semibold text-white">Subscribe</button>
+                <input className="hp" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" value={hp} onChange={(e) => setHp(e.target.value)} />
+                <button disabled={s === "sending"} className="btn-red rounded-full px-6 py-3 text-sm font-semibold text-white disabled:opacity-70">{s === "sending" ? "Sending" : "Subscribe"}</button>
               </form>
             )}
             {s === "error" && <p className="mt-2 text-xs font-semibold text-[#ff7d98]" role="alert">{F.fail}</p>}

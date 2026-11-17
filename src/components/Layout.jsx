@@ -1,3 +1,4 @@
+import Toaster from "./Toaster";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -62,6 +63,7 @@ export default function Layout() {
       <Footer />
       <BackToTop />
       <QuoteModal open={quote} onClose={close} />
+      <Toaster />
     </>
   );
 }
