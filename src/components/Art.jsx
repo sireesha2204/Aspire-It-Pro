@@ -14,22 +14,6 @@ export function Avatar({ i = 0 }) {
   );
 }
 
-export function Cover({ kind = "grid", a = [B, R] }) {
-  const id = `cv${a[0].slice(1)}${a[1].slice(1)}${kind}`;
-  return (
-    <svg viewBox="0 0 320 180" className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <defs><linearGradient id={id} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor={a[0]} /><stop offset="1" stopColor={a[1]} /></linearGradient></defs>
-      <rect width="320" height="180" fill={`url(#${id})`} />
-      <g className="cover-art" fill="none" stroke="#fff" strokeOpacity=".5" strokeWidth="2">
-        {kind === "grid" && [0, 1, 2, 3].map((i) => <rect key={i} x={50 + i * 14} y={30 + i * 10} width="150" height="90" rx="10" fill="#fff" fillOpacity=".08" />)}
-        {kind === "orbs" && <>{[30, 55, 80].map((r) => <circle key={r} cx="200" cy="90" r={r} strokeDasharray="6 8" />)}<circle cx="200" cy="90" r="12" fill="#fff" stroke="none" /></>}
-        {kind === "bars" && [40, 70, 55, 100, 85].map((h, i) => <rect key={i} x={60 + i * 42} y={150 - h} width="26" height={h} rx="6" fill="#fff" fillOpacity=".35" stroke="none" />)}
-        {kind === "nodes" && <><path d="M60 130L130 60l70 50 70-70" />{[[60, 130], [130, 60], [200, 110], [270, 40]].map(([x, y]) => <circle key={x} cx={x} cy={y} r="9" fill="#fff" stroke="none" />)}</>}
-      </g>
-    </svg>
-  );
-}
-
 // Dashboard / workspace scene (About hero, "How we deliver" side image)
 export function DevScene() {
   return (
@@ -104,12 +88,4 @@ export function MapArt() {
       <path d="M220 62c-14 0-24 10-24 23 0 17 24 38 24 38s24-21 24-38c0-13-10-23-24-23z" fill="#fff" /><circle cx="220" cy="85" r="8" fill={R} />
     </svg>
   );
-}
-
-export function LogoMark({ i = 0 }) {
-  const shapes = [
-    <polygon key="0" points="20,4 36,32 4,32" />, <circle key="1" cx="20" cy="18" r="15" />, <rect key="2" x="5" y="5" width="30" height="26" rx="8" />,
-    <path key="3" d="M20 3l15 9v17l-15 9-15-9V12z" />, <path key="4" d="M5 30L20 5l15 25h-9l-6-10-6 10z" />, <path key="5" d="M20 33S4 24 4 13a8 8 0 0116-3 8 8 0 0116 3c0 11-16 20-16 20z" />,
-  ];
-  return <svg viewBox="0 0 40 38" className="absolute inset-0 m-auto h-8 w-8 text-[#3b5fad]/40" fill="currentColor" aria-hidden="true">{shapes[i % 6]}</svg>;
 }

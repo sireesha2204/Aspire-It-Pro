@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Reveal from "../hooks/Reveal";
 import { PROCESS as P } from "../data/content";
 import { Heading } from "./ui";
-import { DevScene } from "./Art";
 
 export default function Process() {
   const listRef = useRef(null);
@@ -30,7 +29,6 @@ export default function Process() {
             <Heading className="text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl">{P.title}</Heading>
             <Reveal delay={150}>
               <Link to="/#services" className="btn-primary mt-8 inline-block rounded-full px-7 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5">{P.button}</Link>
-              <div className="mx-auto mt-10 hidden max-w-sm lg:block"><DevScene /></div>
             </Reveal>
           </div>
         </div>

@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom";
 import ParticleNetwork from "../components/ParticleNetwork";
-import Testimonials from "../components/Testimonials";
 import Reveal from "../hooks/Reveal";
 import CountUp from "../hooks/CountUp";
 import { ABOUT as A } from "../data/content";
 import { Heading, Eyebrow, SmartImg, Tilt } from "../components/ui";
-import { DevScene, RoadArt, Avatar, MissionArt } from "../components/Art";
+import { DevScene, RoadArt, MissionArt } from "../components/Art";
 
 export default function About() {
-  const J = A.journey, T = A.team, M = A.mission;
+  const J = A.journey, M = A.mission;
   return (
     <>
       {/* hero */}
@@ -26,10 +25,11 @@ export default function About() {
             <h2 className="fade-up mt-4 text-xl font-extrabold sm:text-2xl" style={{ animationDelay: ".2s" }}>{A.sub}</h2>
             <p className="fade-up mt-4 text-[15px] leading-relaxed" style={{ color: "var(--muted)", animationDelay: ".3s" }}>{A.text}</p>
             <div className="fade-up mt-8 grid grid-cols-3 gap-3 sm:gap-4" style={{ animationDelay: ".4s" }}>
-              {A.stats.map((s) => (
-                <div key={s.l} className="glass elev rounded-2xl p-3 text-center sm:p-5">
-                  <div className="text-2xl font-extrabold sm:text-4xl" style={{ color: "var(--blue-d)" }}><CountUp to={s.to} suffix={s.s} /></div>
-                  <div className="mt-1 text-[11px] font-semibold sm:text-sm" style={{ color: "var(--muted)" }}>{s.l}</div>
+              {A.stats.map((s, i) => (
+                <div key={s.l} className="stat-card glass elev relative overflow-hidden rounded-2xl p-3 sm:p-5">
+                  <div className="text-[11px] font-bold sm:text-sm" style={{ color: "var(--muted)" }}>{s.l}</div>
+                  <div className="grad-text mt-2 text-2xl font-extrabold sm:text-4xl"><CountUp to={s.to} suffix={s.s} /></div>
+                  <span className="stat-bar" style={{ animationDelay: `${i * 0.35}s` }}></span>
                 </div>
               ))}
             </div>
@@ -55,15 +55,25 @@ export default function About() {
             <div className="absolute bottom-0 left-5 top-0 w-0.5 bg-gradient-to-b from-[var(--blue)] via-[var(--red)] to-[var(--blue)] opacity-30 md:left-1/2" aria-hidden="true"></div>
             <ol className="space-y-10 md:space-y-16">
               {J.items.map(([n, tag, t, d, img], i) => (
-                <li key={n} className="relative pl-14 md:pl-0">
-                  <span className="btn-primary absolute left-0 top-2 z-10 grid h-10 w-10 place-items-center rounded-full text-xs font-extrabold text-white ring-8 ring-[var(--bg)] md:left-1/2 md:-translate-x-1/2">{n}</span>
+                <li key={n} className="relative pl-12 md:pl-0">
+                  <span className="node absolute left-[13px] top-[14px] z-10 md:left-1/2 md:-translate-x-1/2" aria-hidden="true"></span>
+
+                  {/* number + heading right beside the red spot */}
+                  <div className="mb-3 flex items-baseline gap-3 md:hidden">
+                    <span className="num-big">{n}</span>
+                    <span className="text-xl font-extrabold" style={{ color: "var(--red)" }}>{tag}</span>
+                  </div>
+                  <Reveal delay={150} className={`absolute top-0 hidden items-baseline gap-3 md:flex ${i % 2 ? "right-1/2 mr-8 flex-row-reverse" : "left-1/2 ml-8"}`}>
+                    <span className="num-big">{n}</span>
+                    <span className="text-2xl font-extrabold" style={{ color: "var(--red)" }}>{tag}</span>
+                  </Reveal>
+
                   <Reveal className={`${i % 2 ? "rv-r" : "rv-l"} md:w-[calc(50%-3rem)] ${i % 2 ? "md:ml-auto" : ""}`}>
                     <Tilt max={4}>
                       <div className="pf-card group relative overflow-hidden rounded-3xl bg-white">
                         <SmartImg src={img} alt={t} className="h-44 w-full transition duration-700 group-hover:scale-105" fallback={<RoadArt n={i} />} />
                         <div className="relative p-6">
-                          <span className="rounded-full px-3 py-1 text-xs font-bold text-white" style={{ background: "var(--red)" }}>{tag}</span>
-                          <h3 className="mt-4 text-xl font-extrabold">{t}</h3>
+                          <h3 className="text-xl font-extrabold">{t}</h3>
                           <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{d}</p>
                         </div>
                         <span className="glare" aria-hidden="true"></span>
@@ -73,37 +83,6 @@ export default function About() {
                 </li>
               ))}
             </ol>
-          </div>
-        </div>
-      </section>
-
-      {/* team */}
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl px-5 sm:px-6">
-          <div className="max-w-2xl">
-            <Eyebrow>{T.eyebrow}</Eyebrow>
-            <Heading className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">{T.title}</Heading>
-            <Reveal><p className="mt-5 text-[15px] leading-relaxed" style={{ color: "var(--muted)" }}>{T.text[0]}<br className="hidden sm:block" /> {T.text[1]}</p></Reveal>
-          </div>
-          <div className="mt-12 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
-            {T.members.map((m, i) => (
-              <Reveal key={m.n} delay={(i % 3) * 100}>
-                <Tilt className="h-full">
-                  <article className="pf-card group relative h-full overflow-hidden rounded-3xl bg-white">
-                    <div className="relative aspect-[4/4.2] overflow-hidden">
-                      <SmartImg src={m.img} alt={m.n} className="h-full w-full transition duration-700 group-hover:scale-110" fallback={<Avatar i={i} />} />
-                      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#0b1a3a]/60 to-transparent opacity-0 transition group-hover:opacity-100"></div>
-                    </div>
-                    <div className="p-4 sm:p-6">
-                      <h3 className="text-base font-extrabold sm:text-lg">{m.n}</h3>
-                      <div className="text-xs font-bold sm:text-sm" style={{ color: "var(--red)" }}>{m.r}</div>
-                      <p className="mt-2 text-xs leading-relaxed sm:text-sm" style={{ color: "var(--muted)" }}>{m.d}</p>
-                    </div>
-                    <span className="glare" aria-hidden="true"></span>
-                  </article>
-                </Tilt>
-              </Reveal>
-            ))}
           </div>
         </div>
       </section>
@@ -127,12 +106,10 @@ export default function About() {
                 </Reveal>
               ))}
             </ul>
-            <Link to="/contact" className="btn-red btn-shine relative mt-8 inline-block overflow-hidden rounded-full px-8 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5">{M.button}</Link>
           </div>
         </div>
       </section>
 
-      <Testimonials eyebrow={null} title={A.customers.title} items={A.customers.items} logos={null} />
     </>
   );
 }
